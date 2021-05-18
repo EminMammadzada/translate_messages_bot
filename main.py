@@ -82,7 +82,10 @@ def translate(message):
     if translator.target_language == "":
         bot.send_message(message.chat.id, "Set a language to translate to /set_language_to")
     else:
-        pass
+        response = message.reply_to_message
+        text_to_translate = response.json['text']
+        translation = translator.translate(text_to_translate)
+        bot.reply_to(message, translation)
 
 @bot.callback_query_handler(func=lambda call: True)
 def iq_callback(query):
@@ -93,6 +96,5 @@ def iq_callback(query):
         get_to_callback(query)
     else:
         print(f"error happened : {data}")
-
 
 bot.polling()
