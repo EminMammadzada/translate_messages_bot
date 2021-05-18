@@ -10,13 +10,15 @@ class Translator:
             'x-rapidapi-key': "c28aab65bemsh3af2835d9a7e605p1888d2jsn3fa6e41a92ec",
             'x-rapidapi-host': "microsoft-translator-text.p.rapidapi.com"
         }
+        self.original_language = ""
+        self.target_language = ""
 
-    def translate(self, text, from_lang, to_lang):
+    def translate(self, text):
         body = [{'text': text}]
         params = {
             'api-version': '3.0',
-            'from': from_lang,
-            'to': to_lang
+            'from': self.original_language,
+            'to': self.target_language
         }
 
         request = requests.post(self.url, params=params, headers=self.headers, json=body)
@@ -25,9 +27,7 @@ class Translator:
 
 
 API_TOKEN = "1829309173:AAEwaLKc-7UX57EsjdyWfYx-PDlEAO9lEo0"
-LANGUAGES = ["English", "Russian", "Turkish", "Italian", "French"]
-language_from = ""
-language_to = ""
+LANGUAGES = {"English": 'en', "Russian": 'ru', "Turkish": 'tr', "Italian": 'it', "French": 'fr', "Albanian":'AL'}
 bot = telebot.TeleBot(API_TOKEN)
 translator = Translator()
 
@@ -35,20 +35,19 @@ translator = Translator()
 def create_markup(function_name):
     markup = types.InlineKeyboardMarkup()
     for language in LANGUAGES:
-        markup.add(types.InlineKeyboardButton(text=language, callback_data=f'{function_name}-{language}'))
+        lang_code = LANGUAGES[language]
+        markup.add(types.InlineKeyboardButton(text=language, callback_data=f'{function_name}-{lang_code}'))
     return markup
 
 
 def get_from_callback(query):
-    global language_from
     bot.answer_callback_query(query.id)
-    language_from = query.data.split('-')[1]
+    translator.original_language = query.data.split('-')[1]
 
 
 def get_to_callback(query):
-    global language_to
     bot.answer_callback_query(query.id)
-    language_to = query.data.split('-')[1]
+    translator.target_language = query.data.split('-')[1]
 
 
 @bot.message_handler(commands=['start'])
@@ -75,23 +74,18 @@ def set_language_to(message):
 
 @bot.message_handler(commands=['get_current_languages'])
 def get_current_languages(message):
-    global language_from
-    global language_to
-    bot.send_message(message.chat.id, f"{language_from} ---> {language_to}")
+    bot.send_message(message.chat.id, f"{translator.original_language} ---> {translator.target_language}")
 
 
 @bot.message_handler(commands=['translate'])
 def translate(message):
-    if language_to == "":
+    if translator.target_language == "":
         bot.send_message(message.chat.id, "Set a language to translate to /set_language_to")
-
     else:
         pass
 
 @bot.callback_query_handler(func=lambda call: True)
 def iq_callback(query):
-    global language_from
-    global language_to
     data = query.data
     if 'from' in data:
         get_from_callback(query)
