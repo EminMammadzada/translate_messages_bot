@@ -1,11 +1,35 @@
 import telebot
 from telebot import types
+import requests
+
+class Translator:
+    def __init__(self):
+        self.url = "https://microsoft-translator-text.p.rapidapi.com/translate"
+        self.headers = {
+            'content-type': "application/json",
+            'x-rapidapi-key': "c28aab65bemsh3af2835d9a7e605p1888d2jsn3fa6e41a92ec",
+            'x-rapidapi-host': "microsoft-translator-text.p.rapidapi.com"
+        }
+
+    def translate(self, text, from_lang, to_lang):
+        body = [{'text': text}]
+        params = {
+            'api-version': '3.0',
+            'from': from_lang,
+            'to': to_lang
+        }
+
+        request = requests.post(self.url, params=params, headers=self.headers, json=body)
+        response = request.json()
+        return response[0]["translations"][0]["text"]
+
 
 API_TOKEN = "1829309173:AAEwaLKc-7UX57EsjdyWfYx-PDlEAO9lEo0"
 LANGUAGES = ["English", "Russian", "Turkish", "Italian", "French"]
 language_from = ""
 language_to = ""
 bot = telebot.TeleBot(API_TOKEN)
+translator = Translator()
 
 
 def create_markup(function_name):
@@ -58,8 +82,11 @@ def get_current_languages(message):
 
 @bot.message_handler(commands=['translate'])
 def translate(message):
-    pass
+    if language_to == "":
+        bot.send_message(message.chat.id, "Set a language to translate to /set_language_to")
 
+    else:
+        pass
 
 @bot.callback_query_handler(func=lambda call: True)
 def iq_callback(query):
