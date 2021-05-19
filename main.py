@@ -2,6 +2,7 @@ import telebot
 from telebot import types
 import requests
 
+
 class Translator:
     def __init__(self, chat_id):
         self.url = "https://microsoft-translator-text.p.rapidapi.com/translate"
@@ -31,6 +32,7 @@ API_TOKEN = "1829309173:AAEwaLKc-7UX57EsjdyWfYx-PDlEAO9lEo0"
 LANGUAGES = {"English": 'en', "Russian": 'ru', "Italian": 'it', "French": 'fr'}
 translators = []
 bot = telebot.TeleBot(API_TOKEN)
+
 
 def create_markup(function_name):
     markup = types.InlineKeyboardMarkup()
@@ -66,37 +68,37 @@ def start(message):
     translators.append(Translator(message.chat.id))
     i = get_index(message.chat.id)
     bot.send_message(translators[i].chat_id, f'Thanks for starting me, {message.from_user.first_name}. '
-                                      'I am ready to help you whenever you need. Press /help to see available commands')
-
+                                             'I am ready to help you whenever you need. Press /help to see available commands')
 
 
 @bot.message_handler(commands=['help'])
 def help(message):
     i = get_index(message.chat.id)
-    if i>=0:
+    if i >= 0:
         bot.send_message(translators[i].chat_id, 'Available Commands:\n/start\n/help\n/set_language_from'
-                                      '\n/set_language_to\n/get_current_languages\n/translate')
+                                                 '\n/set_language_to\n/get_current_languages\n/translate')
 
 
 @bot.message_handler(commands=['set_language_from'])
 def set_language_from(message):
     i = get_index(message.chat.id)
     if i >= 0:
-        bot.send_message(translators[i].chat_id, "Choose the language to translate from:", reply_markup=create_markup('from'))
+        bot.send_message(translators[i].chat_id, "Choose the language to translate from:",
+                         reply_markup=create_markup('from'))
 
 
 @bot.message_handler(commands=['set_language_to'])
 def set_language_to(message):
     i = get_index(message.chat.id)
     if i >= 0:
-        bot.send_message(translators[i].chat_id, "Choose the language to translate to:", reply_markup=create_markup('to'))
+        bot.send_message(translators[i].chat_id, "Choose the language to translate to:",
+                         reply_markup=create_markup('to'))
 
 
 @bot.callback_query_handler(func=lambda call: True)
 def iq_callback(query):
     data = query.data
     chat_id = query.message.chat.id
-    print(chat_id)
     if 'from' in data:
         get_from_callback(query, chat_id)
     elif 'to' in data:
@@ -109,7 +111,8 @@ def iq_callback(query):
 def get_current_languages(message):
     i = get_index(message.chat.id)
     if i >= 0:
-        bot.send_message(translators[i].chat_id, f"{translators[i].original_language} ---> {translators[i].target_language}")
+        bot.send_message(translators[i].chat_id,
+                         f"{translators[i].original_language} ---> {translators[i].target_language}")
 
 
 @bot.message_handler(commands=['translate'])
@@ -126,5 +129,6 @@ def translate(message):
                 bot.reply_to(message, translation)
             except:
                 pass
+
 
 bot.polling()
