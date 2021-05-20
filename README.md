@@ -7,9 +7,8 @@ Telegram bot designed to overcome language barriers and improve communication
 
 This project was inspired by a communication issue we had in our telegram group chat: me and my other friend
 would often start unconsciously chatting in russian and that would leave our third friend out of conversation.
-To make our group chat more inclusive, I thought of creating this bot so it can translate from four languages that
-may be part of our conversation: Italian, French, English, and Russian. The project was successfully finished and
-now we have no problems in our communication
+To make our group chat more inclusive, I thought of creating this bot so it translates from 4 languages that
+might be part of our conversation: Italian, French, English, and Russian.
 
 
 ### DETAILS
