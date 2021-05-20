@@ -32,7 +32,7 @@ API_TOKEN = "1829309173:AAEwaLKc-7UX57EsjdyWfYx-PDlEAO9lEo0"
 LANGUAGES = {"English": 'en', "Russian": 'ru', "Italian": 'it', "French": 'fr'}
 translators = []
 bot = telebot.TeleBot(API_TOKEN)
-
+bot.set_webhook(url="https://translator-telegram-app.herokuapp.com/")
 
 def create_markup(function_name):
     markup = types.InlineKeyboardMarkup()
@@ -129,6 +129,3 @@ def translate(message):
                 bot.reply_to(message, translation)
             except:
                 pass
-
-
-bot.polling()

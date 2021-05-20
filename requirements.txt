@@ -1,14 +1,1 @@
-certifi==2020.12.5
-chardet==4.0.0
-click==8.0.0
-Flask==2.0.0
-Flask-SSLify==0.1.5
-idna==2.10
-itsdangerous==2.0.0
-Jinja2==3.0.0
-keyboa==3.0.0
-MarkupSafe==2.0.0
-pyTelegramBotAPI==3.7.9
 requests==2.25.1
-urllib3==1.26.4
-Werkzeug==2.0.0
