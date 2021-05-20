@@ -13,7 +13,7 @@ might be part of our conversation: Italian, French, English, and Russian.
 
 ### DETAILS
 
-This bot was coded in Python using pyTelegramBotAPI. I used free tier of Microsoft Translator to create the "heart" 
+This bot was created in Python using pyTelegramBotAPI. I used free tier of Microsoft Translator to create the "heart" 
 of the program. I ran into certain issues with setting webhooks when deploying the project online, so at the moment 
 it is constantly getting updates from telegram servers. In future versions this issue will be fixed for a more 
 efficient way of communicating with telegram servers.
